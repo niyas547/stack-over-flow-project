@@ -16,10 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from questions import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("index",views.IndexView.as_view(),name="index"),
     path("signup",views.SignupView.as_view(),name="register"),
-    path("",views.SigninView.as_view(),name="login")
-]
+    path("",views.SigninView.as_view(),name="login"),
+    path("signout",views.signout_view,name="logout")
+
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

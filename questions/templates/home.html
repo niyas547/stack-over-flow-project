@@ -1,0 +1,40 @@
+{%extends 'base.html'%}
+{%block body_block%}
+
+<div class="container">
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <form action="" method="post" enctype="multipart/form-data">
+                {%csrf_token%}
+                {{form.as_p}}
+                <input type="submit" name="" id="" value="Save" class="btn btn-success mb-2">
+            </form>
+        </div>
+        <div class="col-4"></div>
+    </div>
+    <div class="row">
+        {%for q in questions%}
+
+        <div class="col-lg-6 border border-info">
+            <!-- Blog post-->
+            <div class="card mb-4">
+                {%if q.image%}
+                    <a href="#!"><img class="card-img-top" src="{{q.image.url}}" alt="..." /></a>
+
+                {%endif%}
+                <div class="card-body">
+                    <h2 class="card-title h4">{{q.description}}</h2>
+                    <div class="small text-muted">{{q.user}}</div>
+                    <div class="small text-muted">{{q.asked_date}}</div>
+                    <!-- <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p> -->
+                    <a class="btn btn-primary" href="#!">Read more →</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6"></div>
+            {%endfor%}
+    </div>
+</div>
+
+{%endblock%}

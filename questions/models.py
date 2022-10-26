@@ -10,7 +10,7 @@ class MyUser(AbstractUser):
 class Questions(models.Model):
     user=models.ForeignKey(MyUser,on_delete=models.CASCADE)
     description=models.CharField(max_length=120)
-    image=models.ImageField(upload_to="images",null=True)
+    image=models.ImageField(upload_to="images",null=True,blank=True)
     asked_date=models.DateTimeField(auto_now_add=True)
     is_active=models.BooleanField(default=True)
 
