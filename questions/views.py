@@ -1,16 +1,24 @@
 
-from urllib import request
+
+
 from django.shortcuts import render,redirect
-from django.views.generic import TemplateView
-from questions.models import Questions
 from questions.forms import RegistrationForm,LoginForm,QuestionForm
-from django.views.generic import CreateView,View,FormView,ListView
-from questions.models import MyUser
+from django.views.generic import TemplateView,CreateView,View,FormView,ListView,DetailView
+from questions.models import Answers, MyUser
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate,login,logout
-from questions.models import MyUser
+from questions.models import MyUser,Questions
+from django.contrib import messages
+from django.utils.decorators import method_decorator
 # Create your views here.
-
+def signin_required(fn):
+    def wrapper(request,*args,**kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request,"you must login")
+            return redirect("login")
+        else:
+            return fn(request,*args,**kwargs)
+    return wrapper
    
 class SignupView(CreateView):
     model=MyUser
@@ -32,14 +40,17 @@ class SigninView(FormView):
             user=authenticate(request,username=uname,password=pwd)
             if user:
                 login(request,user)
+                messages.success(request,"Login Completed")
                 return redirect("index")
             else:
+                messages.error(request,"Invalid Credentials")
                 return render(request,"login.html",{"form":form})
-
+@signin_required
 def signout_view(request,*args,**kwargs):   
     logout(request)
     return redirect("login")
 
+@method_decorator(signin_required,name="dispatch")
 class IndexView(CreateView,ListView):
     model=Questions
     form_class=QuestionForm
@@ -52,3 +63,16 @@ class IndexView(CreateView,ListView):
         return super().form_valid(form)
     def get_queryset(self):
         return Questions.objects.all().exclude(user=self.request.user)
+
+class QuestionDetailView(DetailView):
+    model=Questions
+    template_name="question-detail.html"
+    pk_url_kwarg="id"
+    context_object_name="question"
+
+def add_answer(request,*args,**kwargs):
+    qid=kwargs.get("id")
+    question=Questions.objects.get(id=qid)
+    answer=request.POST.get("answer")
+    Answers.objects.create(user=request.user,answer=answer,question=question)
+    return redirect("index")

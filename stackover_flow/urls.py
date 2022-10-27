@@ -24,6 +24,8 @@ urlpatterns = [
     path("index",views.IndexView.as_view(),name="index"),
     path("signup",views.SignupView.as_view(),name="register"),
     path("",views.SigninView.as_view(),name="login"),
-    path("signout",views.signout_view,name="logout")
+    path("signout",views.signout_view,name="logout"),
+    path("questions/<int:id>",views.QuestionDetailView.as_view(),name="question-details"),
+    path("questions/<int:id>/answer",views.add_answer,name="add-answer")
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

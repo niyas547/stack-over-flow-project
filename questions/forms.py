@@ -28,7 +28,7 @@ class QuestionForm(forms.ModelForm):
             "image",
         ]
         widgets={
-            "description":forms.Textarea(attrs={"class":"form-control border border-info","rows":4}),
-            "image":forms.FileInput(attrs={"class":"form-select border border-info"})
+            "description":forms.Textarea(attrs={"class":"form-control border border-info border border-3","rows":4,"placeholder":"what's your question?"}),
+            "image":forms.FileInput(attrs={"class":"form-select border border-info border border-3"})
 
         }
