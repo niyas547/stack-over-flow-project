@@ -64,15 +64,26 @@ class IndexView(CreateView,ListView):
     def get_queryset(self):
         return Questions.objects.all().exclude(user=self.request.user)
 
+@method_decorator(signin_required,name="dispatch")
 class QuestionDetailView(DetailView):
     model=Questions
     template_name="question-detail.html"
     pk_url_kwarg="id"
     context_object_name="question"
 
+@signin_required
 def add_answer(request,*args,**kwargs):
     qid=kwargs.get("id")
     question=Questions.objects.get(id=qid)
     answer=request.POST.get("answer")
     Answers.objects.create(user=request.user,answer=answer,question=question)
+    return redirect("index")
+
+# localhost:8000/answers/{id}/upvote
+@signin_required
+def upvote_view(request,*args,**kwargs):
+    ans_id=kwargs.get("id")
+    ans=Answers.objects.get(id=ans_id)
+    ans.upvote.add(request.user)
+    ans.save()
     return redirect("index")
