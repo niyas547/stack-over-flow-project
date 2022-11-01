@@ -11,6 +11,7 @@ class RegistrationForm(UserCreationForm):
     username=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control border border-info","placeholder":"enter username"}),label='')
     email=forms.CharField(widget=forms.EmailInput(attrs={"class":"form-control border border-info","placeholder":"enter email"}),label='')
     phone=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control border border-info","placeHolder":"enter phone number"}),label='')
+    profile_pic=forms.FileField(widget=forms.FileInput(attrs={"class":"form-select border border-info",}))
     class Meta:
         model=MyUser
         fields=["first_name","last_name","username","password1","password2","email","phone","profile_pic"]
@@ -28,10 +29,10 @@ class QuestionForm(forms.ModelForm):
             "image",
         ]
         widgets={
-            "description":forms.Textarea(attrs={"class":"form-control border border-info border border-3","rows":4,"placeholder":"what's your question?"}),
-            "image":forms.FileInput(attrs={"class":"form-select border border-info border border-3"})
+            "description":forms.Textarea(attrs={"class":"form-control border border-primary border border-3","rows":4,"placeholder":"what's your question?"}),
+            "image":forms.FileInput(attrs={"class":"form-select border border-primary border border-3"})
 
         }
 
 class AnswerForm(forms.Form):
-    answer=forms.CharField(widget=forms.Textarea(attrs={"class":"form-control border border-info border border-2","rows":5}))
+    answer=forms.CharField(widget=forms.Textarea(attrs={"class":"form-control border border-dark border border-2","rows":5}))
