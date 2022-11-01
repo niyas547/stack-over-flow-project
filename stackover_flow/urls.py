@@ -26,7 +26,10 @@ urlpatterns = [
     path("",views.SigninView.as_view(),name="login"),
     path("signout",views.signout_view,name="logout"),
     path("questions/<int:id>",views.QuestionDetailView.as_view(),name="question-details"),
+    path("myquestions",views.MyquestionsView.as_view(),name="my-questions"),
+    path("myquestions/<int:id>/delete",views.delete_myquestion,name="delete-myquestion"),
     path("questions/<int:id>/answer",views.add_answer,name="add-answer"),
-    path("answers/<int:id>/upvote",views.upvote_view,name="upvote")
+    path("answers/<int:id>/upvote",views.upvote_view,name="upvote"),
+    path("answers/<int:id>/delete",views.delete_answer,name="delete-answer")
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

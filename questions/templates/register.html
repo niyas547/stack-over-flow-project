@@ -7,22 +7,33 @@
     <title>Registration</title>
     <!-- CSS only -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-   <div class="container">
-    <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6">
-            <center><h3>Register Here</h3></center>
-            <form action="" method="post" enctype="multipart/form-data">
-                {%csrf_token%}
-                {{form.as_p}}
-                <input type="submit" name="" id="" value="Register" class="btn btn-success">
-                Already have an account?<span><a href="{%url 'login'%}">LoginNow</a></span>
-            </form>
+   <div class="container-fluid " style="width:100vw ; height:100vh ;background-image: linear-gradient(0deg, #080809 0%, #367c7a 100%)">
+    <div class="row d-flex justify-content-center align-items-center" style="height: 100%;">
+        <div class="col-2"></div>
+        <div class="col-8 ">
+            <div class="card">
+                <div class="card-header">
+                  <h3 class="d-flex align-items-center justify-content-center"><i class="fa-sharp fa-solid fa-users"></i>Register Here</h3>
+                </div>
+                <div class="card-body">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {%csrf_token%}
+                        {{form.as_p}}
+                        Already have an account?<span><a href="{%url 'login'%}">LoginNow</a></span>
+                        <center><input type="submit" name="" id="" value="Register" class="btn btn-success"></center>
+                        
+                        
+                    </form>
+                </div>
+              </div>
         </div>
-        <div class="col-3"></div>
+        <div class="col-2"></div>
     </div>
    </div> 
 </body>
 </html>
+
+            

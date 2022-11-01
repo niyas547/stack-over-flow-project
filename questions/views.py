@@ -2,7 +2,7 @@
 
 
 from django.shortcuts import render,redirect
-from questions.forms import RegistrationForm,LoginForm,QuestionForm
+from questions.forms import RegistrationForm,LoginForm,QuestionForm,AnswerForm
 from django.views.generic import TemplateView,CreateView,View,FormView,ListView,DetailView
 from questions.models import Answers, MyUser
 from django.urls import reverse_lazy
@@ -64,20 +64,50 @@ class IndexView(CreateView,ListView):
     def get_queryset(self):
         return Questions.objects.all().exclude(user=self.request.user)
 
+class MyquestionsView(ListView):
+    template_name="my-questions.html"
+    context_object_name="questions"
+    def get_queryset(self):
+        return Questions.objects.filter(user=self.request.user)
+
+def delete_myquestion(request,*args,**kwargs):
+    user=request.user
+    question=Questions.objects.filter(user=user)
+    question.delete()
+    return redirect("index")
+
+
 @method_decorator(signin_required,name="dispatch")
-class QuestionDetailView(DetailView):
+class QuestionDetailView(DetailView,FormView):
     model=Questions
     template_name="question-detail.html"
     pk_url_kwarg="id"
     context_object_name="question"
+    form_class=AnswerForm
+
+
+    
+
 
 @signin_required
 def add_answer(request,*args,**kwargs):
-    qid=kwargs.get("id")
-    question=Questions.objects.get(id=qid)
-    answer=request.POST.get("answer")
-    Answers.objects.create(user=request.user,answer=answer,question=question)
+    if request.method=="POST":
+        form=AnswerForm(request.POST)
+        if form.is_valid():
+            answer=form.cleaned_data.get("answer")
+            qid=kwargs.get("id")
+            question=Questions.objects.get(id=qid)
+            Answers.objects.create(question=question,answer=answer,user=request.user)
+            return redirect("index")
+        else:
+            return redirect("add-answer")
+
+def delete_answer(request,*args,**kwargs):
+    aid=kwargs.get("id")
+    answer=Answers.objects.get(id=aid)
+    answer.delete()
     return redirect("index")
+
 
 # localhost:8000/answers/{id}/upvote
 @signin_required
