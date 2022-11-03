@@ -18,8 +18,8 @@ class RegistrationForm(UserCreationForm):
      
 
 class LoginForm(forms.Form):
-    username=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control border border-info","placeholder":"enter username"}))
-    password=forms.CharField(widget=forms.PasswordInput(attrs={"class":"form-control border border-info","placeholder":"enter password"}))
+    username=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control border border-info","placeholder":"enter username"}),label='')
+    password=forms.CharField(widget=forms.PasswordInput(attrs={"class":"form-control border border-info","placeholder":"enter password"}),label='')
 
 class QuestionForm(forms.ModelForm):
     class Meta:

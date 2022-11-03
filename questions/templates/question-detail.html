@@ -35,13 +35,17 @@
                               <ul class="list-group border border-1 border border-dark">
                                 {%for ans in question.fetch_answers%}
                                     <li class="list-group-item border border-1 border border-dark">
-                                        {{ans.answer}}
+                                        <i class="fa-solid fa-comment text-muted"></i>{{ans.answer}}
+                                        <hr>
                                         <div>
-                                            replied on {{ans.answered_date}}
-                                            by {{ans.user}} 
+                                            
+                                            <i class="fa-solid fa-calendar text-muted"></i> {{ans.answered_date}}
+                                            <div>
+                                                <i class="fa-solid fa-user text-muted"></i>{{ans.user}}
+                                            </div> 
                                             
                                         </div>
-                                        <a href="{%url 'upvote' ans.id%}" class="btn btn-primary"><i class="fa-sharp fa-solid fa-thumbs-up"></i> <span>{{ans.upvote.all.count}}</span></a> 
+                                        <a href="{%url 'upvote' ans.id%}" class="btn btn-outline-primary"><i class="fa-sharp fa-solid fa-thumbs-up"></i> <span>{{ans.upvote.all.count}}</span></a> 
                                         {%if ans.user == request.user%}
                                         <a href="{%url 'delete-answer' ans.id%}" class="btn btn-outline-danger">Remove</a>
                                         {%endif%}

@@ -32,35 +32,9 @@
         </nav>
         <!-- Page header with logo and tagline-->
         <header class="py-5 bg-light border-bottom mb-4">
-            <div class="container">
-                <!-- for messages -->
-                <div class="row">
-                    <div class="col-4"></div>
-                    <div class="col-4">
-                        {%if messages%}
-                    {%for msg in messages%}
-                    {% if msg.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>{{msg}}</strong>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                
-                {% endif %}
-                {% if msg.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <strong>{{msg}}</strong> 
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                
-                {% endif %}
-                    {%endfor%}
-                {%endif%}
-                    </div>
-                    <div class="col-4"></div>
-                </div>
-                <!-- end messages -->
+            <div class="container-fluid">
                 <div class="text-center my-5">
-                    <h1 class="fw-bolder text-dark">Welcome to QA-Circle Home!</h1>
+                    <h1 class="fw-bolder" style="color:rgb(93, 90, 90) ;" ><i class="fa-sharp fa-solid fa-layer-group fa-2x text-warning"></i>Welcome to <span class="text-dark">QA</span><span class="text-success">Circle</span> Home!</h1>
                     <!-- <p class="lead mb-0">A Bootstrap 5 starter layout for your next blog homepage</p> -->
                 </div>
             </div>

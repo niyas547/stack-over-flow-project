@@ -10,6 +10,7 @@ from django.contrib.auth import authenticate,login,logout
 from questions.models import MyUser,Questions
 from django.contrib import messages
 from django.utils.decorators import method_decorator
+from django.contrib.messages.views import SuccessMessageMixin
 # Create your views here.
 def signin_required(fn):
     def wrapper(request,*args,**kwargs):
@@ -40,7 +41,7 @@ class SigninView(FormView):
             user=authenticate(request,username=uname,password=pwd)
             if user:
                 login(request,user)
-                messages.success(request,"Login Completed")
+                # messages.success(request,"Login Completed")
                 return redirect("index")
             else:
                 messages.error(request,"Invalid Credentials")
@@ -51,10 +52,11 @@ def signout_view(request,*args,**kwargs):
     return redirect("login")
 
 @method_decorator(signin_required,name="dispatch")
-class IndexView(CreateView,ListView):
+class IndexView(SuccessMessageMixin,CreateView,ListView):
     model=Questions
     form_class=QuestionForm
     template_name="home.html"
+    success_message="Question added Successfully"
     success_url=reverse_lazy("index")
     context_object_name="questions"
 
@@ -64,12 +66,13 @@ class IndexView(CreateView,ListView):
     def get_queryset(self):
         return Questions.objects.all().exclude(user=self.request.user)
 
+@method_decorator(signin_required,name="dispatch")
 class MyquestionsView(ListView):
     template_name="my-questions.html"
     context_object_name="questions"
     def get_queryset(self):
         return Questions.objects.filter(user=self.request.user)
-
+@signin_required
 def delete_myquestion(request,*args,**kwargs):
     user=request.user
     question=Questions.objects.filter(user=user)
@@ -101,7 +104,7 @@ def add_answer(request,*args,**kwargs):
             return redirect("index")
         else:
             return redirect("add-answer")
-
+@signin_required
 def delete_answer(request,*args,**kwargs):
     aid=kwargs.get("id")
     answer=Answers.objects.get(id=aid)
