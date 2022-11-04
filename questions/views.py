@@ -11,6 +11,7 @@ from questions.models import MyUser,Questions
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.contrib.messages.views import SuccessMessageMixin
+from django.views.decorators.cache import never_cache
 # Create your views here.
 def signin_required(fn):
     def wrapper(request,*args,**kwargs):
@@ -20,7 +21,9 @@ def signin_required(fn):
         else:
             return fn(request,*args,**kwargs)
     return wrapper
-   
+
+decs=[signin_required,never_cache]
+
 class SignupView(CreateView):
     model=MyUser
     form_class=RegistrationForm
@@ -46,12 +49,12 @@ class SigninView(FormView):
             else:
                 messages.error(request,"Invalid Credentials")
                 return render(request,"login.html",{"form":form})
-@signin_required
+decs
 def signout_view(request,*args,**kwargs):   
     logout(request)
     return redirect("login")
 
-@method_decorator(signin_required,name="dispatch")
+@method_decorator(decs,name="dispatch")
 class IndexView(SuccessMessageMixin,CreateView,ListView):
     model=Questions
     form_class=QuestionForm
@@ -66,21 +69,20 @@ class IndexView(SuccessMessageMixin,CreateView,ListView):
     def get_queryset(self):
         return Questions.objects.all().exclude(user=self.request.user)
 
-@method_decorator(signin_required,name="dispatch")
-class MyquestionsView(ListView):
-    template_name="my-questions.html"
-    context_object_name="questions"
-    def get_queryset(self):
-        return Questions.objects.filter(user=self.request.user)
-@signin_required
+@method_decorator(decs,name="dispatch")
+class MyquestionsView(View):
+    def get(self,request,*args,**kwargs):
+        my_questions=request.user.questions_set.all()
+        return render(request,"my-questions.html",{"questions":my_questions})
+decs
 def delete_myquestion(request,*args,**kwargs):
-    user=request.user
-    question=Questions.objects.filter(user=user)
-    question.delete()
-    return redirect("index")
+    id=kwargs.get("id")
+    Questions.objects.get(id=id).delete()
+    return redirect("my-questions")
 
+ 
 
-@method_decorator(signin_required,name="dispatch")
+@method_decorator(decs,name="dispatch")
 class QuestionDetailView(DetailView,FormView):
     model=Questions
     template_name="question-detail.html"
@@ -92,7 +94,7 @@ class QuestionDetailView(DetailView,FormView):
     
 
 
-@signin_required
+decs
 def add_answer(request,*args,**kwargs):
     if request.method=="POST":
         form=AnswerForm(request.POST)
@@ -104,7 +106,7 @@ def add_answer(request,*args,**kwargs):
             return redirect("index")
         else:
             return redirect("add-answer")
-@signin_required
+decs
 def delete_answer(request,*args,**kwargs):
     aid=kwargs.get("id")
     answer=Answers.objects.get(id=aid)
@@ -113,7 +115,7 @@ def delete_answer(request,*args,**kwargs):
 
 
 # localhost:8000/answers/{id}/upvote
-@signin_required
+decs
 def upvote_view(request,*args,**kwargs):
     ans_id=kwargs.get("id")
     ans=Answers.objects.get(id=ans_id)
